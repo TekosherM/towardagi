@@ -1,0 +1,35 @@
+---
+title: "Inference Cost Is the New Benchmark"
+description: "Benchmark leaderboards are saturating. The metric that now decides model selection is cost per million tokens at acceptable quality — and it's reshaping how labs build."
+category: trends
+date: 2026-08-24
+authors: [mira-chen, editorial]
+tags: [inference, economics, pricing, trends]
+---
+
+Ask any team shipping an AI product which model they use, and the answer increasingly starts with a dollar sign. The leaderboard era is ending; the unit-economics era has begun.
+
+## The saturation problem
+
+Top models now cluster within a few points of each other on MMLU-class suites, math olympiads, and coding benchmarks. When quality differences shrink below the noise of prompt variation, price and latency become the tiebreakers.
+
+## The new selection stack
+
+Teams we talk to now evaluate models on a four-factor stack:
+
+1. **Quality floor** — does it clear the minimum bar for the task?
+2. **Cost per million tokens** — at production batch sizes, not list price
+3. **Latency distribution** — p95, not average
+4. **Context economics** — how the price scales as context grows
+
+## What this does to labs
+
+When cost is the battleground, architecture decisions become pricing decisions. Sparse MoE, speculative decoding, and aggressive quantization are no longer research curiosities — they are the product.
+
+<Callout type="note" title="Watch the routers">
+Routing layers that cascade cheap-to-expensive models per request are becoming the default deployment pattern. The model you pick is increasingly the model your router picks.
+</Callout>
+
+## The takeaway
+
+Expect marketing to shift from "state of the art" to "state of the art per dollar." The labs that win the next two years will be the ones that treat inference efficiency as a first-class research objective.

@@ -1,0 +1,40 @@
+---
+title: "Transformers, Explained Like You're Building One"
+description: "A builder's walkthrough of the transformer: tokens, attention, layers, and the training loop — with the intuition you need to actually reason about models."
+category: education
+date: 2026-08-21
+authors: [editorial]
+tags: [education, transformers, attention, fundamentals]
+---
+
+Most transformer explainers stop at analogies. This one builds the thing, layer by layer, with the mental model you need to reason about real systems.
+
+## Tokens: the atom of everything
+
+A model never sees text. It sees integers — token IDs produced by a tokenizer that chops text into subword pieces. Everything downstream, from context windows to pricing, is denominated in tokens.
+
+## Attention: the core operation
+
+Attention lets every token look at every other token and decide what to pay attention to. Three matrices — query, key, value — compute a weighted average over the sequence.
+
+- **Query**: what am I looking for?
+- **Key**: what do I contain?
+- **Value**: what do I hand over if matched?
+
+Scaled dot-product attention is just a soft dictionary lookup. That's it. That's the whole trick.
+
+## Layers: stacking the trick
+
+One attention head sees one relationship. A layer runs dozens of heads in parallel, then a feed-forward network processes the result per token. Stack 30 to 100 of these layers and simple operations compound into something that can plan, translate, and write code.
+
+<Callout type="note" title="The intuition to keep">
+Each layer refines the representation of every token in light of the whole sequence. Depth is iteration; attention is communication.
+</Callout>
+
+## Training: next-token prediction
+
+The training objective is brutally simple: predict the next token. Run the model on trillions of tokens, compare its probability distribution to reality, backpropagate the error. Capabilities emerge from scale, not from the objective.
+
+## Where to go next
+
+Implement a tiny transformer from scratch — even 10M parameters on a laptop teaches more than a hundred papers. Then read our [deep dive on reasoning stacks](/articles/inside-deepseek-v4-reasoning-stack) to see what modern training adds on top.

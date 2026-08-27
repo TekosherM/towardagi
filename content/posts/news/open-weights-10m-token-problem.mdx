@@ -1,0 +1,36 @@
+---
+title: "The Open-Weights Race Just Got a 10M-Token Problem"
+description: "Meta's Llama 4 Scout shipped with a 10M-token context window, and every open lab is now racing to match it. Here's why context length became the new frontier battleground."
+category: news
+date: 2026-08-27
+authors: [editorial]
+tags: [open-weights, context-window, llama, meta]
+featured: true
+---
+
+For two years, the open-weights race was measured in benchmark points. This week it started being measured in tokens — ten million of them.
+
+Meta's [Llama 4 Scout](/articles/llama-4-scout-lands) landed with a context window large enough to hold roughly 7,500 pages of text in a single pass, and the rest of the ecosystem responded within 48 hours with their own long-context claims.
+
+## Why context became the battleground
+
+Reasoning benchmarks have saturated. The top open and closed models now sit within a few points of each other on math and code suites, so labs need a new axis to compete on. Context is that axis.
+
+Long context unlocks workloads that short-context models simply cannot touch:
+
+- Whole-repository code agents that read the codebase in one pass
+- Multi-hour meeting and video summarization
+- Legal and scientific document review across hundreds of files
+- Persistent agent memory without external retrieval
+
+## The catch nobody mentions
+
+A 10M-token window is a capability claim, not a quality guarantee. Attention quality degrades unevenly across long contexts, and most public evaluations still test retrieval at 128K or less.
+
+<Callout type="warning" title="Read the fine print">
+Needle-in-a-haystack pass rates at 10M tokens are rarely published. Window size and effective context are different numbers.
+</Callout>
+
+## What to watch next
+
+Expect DeepSeek and Qwen to respond within the quarter, and expect inference providers to start pricing long-context requests differently. The economics of attention are about to become the economics of the whole stack.

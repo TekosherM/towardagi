@@ -1,0 +1,42 @@
+---
+title: "Inside DeepSeek V4's Reasoning Stack"
+description: "DeepSeek V4 posts frontier-class math and code scores at a fraction of the inference cost. We dissect the publicly documented pieces of its reasoning pipeline."
+category: deep-dive
+date: 2026-08-23
+authors: [mira-chen]
+tags: [deepseek, reasoning, moe, deep-dive]
+model: deepseek-ai/deepseek-v4
+featured: false
+---
+
+DeepSeek V4 is the clearest signal yet that reasoning quality and inference cost are no longer locked in a fixed tradeoff. Here is what the public documentation tells us about how they did it.
+
+## The architecture: sparse, again
+
+Like several of this generation's flagships, V4 is a mixture-of-experts model. Only a slice of its parameters activate per token, which keeps per-token compute low even as total capacity grows.
+
+## Reasoning as a trained behavior
+
+The headline results come from post-training, not pre-training. The documented recipe has three stages:
+
+1. **Cold-start reasoning traces** — curated long-form chain-of-thought data
+2. **Rule-based reinforcement learning** — rewards for verifiable answers in math and code, no human labelers required
+3. **Distillation back into the base policy** — so fast inference keeps most of the reasoning gains
+
+## Why verifiable domains first
+
+Math and code have automatic graders: an answer is right or wrong, a test passes or fails. That makes reinforcement learning cheap and scalable. Open-ended tasks still rely on the older supervised pipeline.
+
+<Callout type="warning" title="The honest caveat">
+Reasoning traces inflate token counts. A model that thinks for 4,000 tokens before answering costs 4,000 tokens, whatever the sticker price per million.
+</Callout>
+
+## The cost angle
+
+V4's per-token price sits far below closed frontier models, and the sparse architecture means self-hosting is realistic for organizations with moderate GPU budgets. Combined with open weights, that changes who can deploy frontier-class reasoning.
+
+## What it means
+
+The moat is moving from model access to training pipelines. If reasoning can be taught with verifiable rewards, the labs with the best reward infrastructure — not the biggest models — set the pace.
+
+Full registry entry on the [model radar](/models/deepseek-ai-deepseek-v4).

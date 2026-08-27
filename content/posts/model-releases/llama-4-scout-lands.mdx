@@ -1,0 +1,38 @@
+---
+title: "Llama 4 Scout Lands: What a 10M Context Window Actually Buys You"
+description: "Meta's new mixture-of-experts flagship is open-weights, agent-tuned, and absurdly long-context. We break down the architecture and what it means for self-hosters."
+category: model-release
+date: 2026-08-26
+authors: [mira-chen]
+tags: [llama, meta, moe, open-weights, model-release]
+model: meta-llama/llama-4-scout
+---
+
+Meta released Llama 4 Scout under open weights, and it is the most consequential open release of the year. A mixture-of-experts architecture, a 10M-token context window, and explicit tuning for agentic tool use.
+
+## Architecture at a glance
+
+Scout uses a sparse MoE design: a large total parameter count with a much smaller active footprint per token. That is the trick that makes a 10M window economically plausible at all.
+
+- Sparse MoE with shared expert layers
+- 10M-token context via interleaved attention
+- Tool-use and structured-output tuning baked into post-training
+- Single-GPU inference possible at quantized precision
+
+## What the context window buys you
+
+The honest answer: fewer moving parts. Teams that currently stitch together retrieval, chunking, and reranking pipelines can collapse much of that into a single long-context call.
+
+<Callout type="note" title="When RAG still wins">
+If your corpus changes faster than you can re-embed it, or exceeds the window by orders of magnitude, retrieval is still the right architecture. Long context is a simplification, not a universal replacement.
+</Callout>
+
+## Self-hosting math
+
+At 4-bit quantization, Scout fits on a single high-memory GPU for modest batch sizes. For production throughput, expect a small cluster — but the cost curve is dramatically better than dense equivalents.
+
+## Bottom line
+
+Scout is the first open model where the context window is the headline feature rather than the benchmark score. That is a sign of where the whole field is heading.
+
+See the full entry on the [model radar](/models/meta-llama-llama-4-scout).

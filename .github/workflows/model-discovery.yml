@@ -1,0 +1,30 @@
+name: Model Discovery
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Run model discovery
+        run: node scripts/discover-models.mjs
+
+      - name: Commit registry updates
+        run: |
+          git config user.name "towardagi-bot"
+          git config user.email "bot@towardagi.com"
+          git add content/models/registry.json
+          git diff --cached --quiet || git commit -m "chore(radar): refresh model registry"
+          git push
