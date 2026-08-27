@@ -61,7 +61,7 @@ interface StaggerProps {
   y?: number;
 }
 
-export function Stagger({ children, className, selector = "> *", amount = 0.09, y = 26 }: StaggerProps) {
+export function Stagger({ children, className, selector = ":scope > *", amount = 0.09, y = 26 }: StaggerProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
