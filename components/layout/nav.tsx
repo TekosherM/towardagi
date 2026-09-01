@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 const LINKS = [
   { href: "/news", label: "News" },
   { href: "/models", label: "Model Radar" },
-  { href: "/category/trends", label: "Trends" },
+  { href: "/players", label: "Players" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/apps", label: "Apps" },
   { href: "/category/education", label: "Education" },
-  { href: "/category/deep-dives", label: "Deep Dives" },
-  { href: "/about", label: "About" },
 ];
 
 export function Nav() {

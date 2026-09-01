@@ -4,14 +4,16 @@ import { timeAgo } from "@/lib/utils";
 
 const SECTIONS = [
   { href: "/news", label: "News" },
-  { href: "/category/trends", label: "Trends" },
+  { href: "/models", label: "Model Radar" },
+  { href: "/players", label: "Players" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/apps", label: "Apps" },
   { href: "/category/education", label: "Education" },
-  { href: "/category/deep-dives", label: "Deep Dives" },
-  { href: "/category/model-releases", label: "Model Releases" },
 ];
 
 const PROJECT = [
-  { href: "/models", label: "Model Radar" },
+  { href: "/category/trends", label: "Trends" },
+  { href: "/category/deep-dives", label: "Deep Dives" },
   { href: "/authors", label: "Authors" },
   { href: "/about", label: "About" },
   { href: "/contribute", label: "Contribute" },
