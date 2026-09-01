@@ -1,0 +1,46 @@
+---
+title: "DeepSeek V4: Reasoning-First, Cost-Second"
+description: "DeepSeek's latest flagship posts frontier-class math and code scores at a fraction of the inference cost. Here's what matters about the release."
+category: model-release
+date: 2026-08-22
+authors: [mira-chen]
+tags: [deepseek, reasoning, moe, open-weights, release]
+model: deepseek-ai/deepseek-v4
+---
+
+DeepSeek V4 landed this week, and the headline is clear: reasoning quality at a price point that changes the economics of deployment.
+
+## What shipped
+
+- **Architecture:** Mixture-of-experts, sparse activation
+- **Context window:** 262K tokens
+- **Benchmarks:** Frontier-class on math and code suites
+- **Availability:** Open weights, with API access via multiple providers
+
+## The reasoning story
+
+V4's headline results come from post-training, not pre-training. The documented recipe has three stages:
+
+1. **Cold-start reasoning traces** — curated long-form chain-of-thought data
+2. **Rule-based reinforcement learning** — rewards for verifiable answers in math and code
+3. **Distillation back into the base policy** — so fast inference keeps most of the reasoning gains
+
+The result is a model that thinks well but does not charge you for every thought token at frontier prices.
+
+## The cost angle
+
+V4's per-token price sits far below closed frontier models. Combined with the sparse MoE architecture, self-hosting becomes realistic for organizations with moderate GPU budgets.
+
+For teams already running inference infrastructure, the total cost of ownership calculation increasingly favors open weights — especially when the quality gap is this narrow.
+
+## What to watch
+
+- **Long-context quality:** 262K is a large window. Needle-in-a-haystack performance at the longest contexts remains to be independently verified.
+- **Reasoning token overhead:** Chain-of-thought traces inflate token counts. The sticker price per million tokens does not capture the full cost if the model thinks for thousands of tokens before answering.
+- **Ecosystem adoption:** Watch which inference providers and orchestration frameworks add first-class V4 support.
+
+## The bottom line
+
+DeepSeek V4 is the clearest signal yet that reasoning quality and inference cost are no longer locked in a fixed tradeoff. It is not the final word — but it is a word that changes the conversation.
+
+Full registry entry on the [model radar](/models/deepseek-ai-deepseek-v4).

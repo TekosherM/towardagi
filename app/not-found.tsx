@@ -25,6 +25,12 @@ export default function NotFound() {
         >
           All dispatches
         </Link>
+        <Link
+          href="/search"
+          className="border border-line px-6 py-3.5 font-mono text-xs tracking-[0.18em] uppercase text-bone transition-colors hover:border-signal/60 hover:text-signal"
+        >
+          Search
+        </Link>
       </div>
       <p className="mt-14 font-mono text-[0.62rem] tracking-[0.3em] uppercase text-dim">
         <span className="inline-block h-3 w-1.5 animate-blink bg-signal align-middle" aria-hidden />{" "}
