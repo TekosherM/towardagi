@@ -121,7 +121,7 @@ export function ShareButtons({ url, title, description, className }: ShareButton
           </svg>
           {copied ? "Copied!" : "Copy link"}
         </button>
-        {"undefined" !== typeof navigator && navigator.share && (
+        {"undefined" !== typeof navigator && typeof navigator.share === "function" && (
           <button
             type="button"
             onClick={handleNativeShare}

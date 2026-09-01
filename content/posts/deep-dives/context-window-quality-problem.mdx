@@ -1,0 +1,68 @@
+---
+title: "The Context Window Quality Problem: Bigger Isn't Always Better"
+description: "A 10M-token context window sounds impressive. But attention quality degrades across long contexts, and most public evaluations don't test beyond 128K. Here's what actually matters."
+category: deep-dive
+date: 2026-08-26
+authors: [editorial]
+tags: [context-window, attention, evaluation, long-context]
+---
+
+Meta's Llama 4 Scout ships with a 10-million-token context window. That is enough to hold roughly 7,500 pages of text in a single pass. It is a remarkable engineering achievement.
+
+It is also, in most practical workloads, a number that does not mean what you think it means.
+
+## The claim vs. the reality
+
+Context window size measures how many tokens a model can *process*. It does not measure how well the model *uses* those tokens. These are very different things.
+
+A model with a 10M-token context window can accept 10 million tokens as input. But if you ask it about something at the beginning of a 5M-token document, the answer quality may be worse than if you had given it only the relevant 50,000 tokens.
+
+This is the context window quality problem: **capacity is not capability**.
+
+## Why attention degrades
+
+The transformer architecture uses attention mechanisms to relate tokens to each other. As context grows:
+
+1. **Attention dilution.** The model's attention is spread across more tokens. Any single token receives less "focus."
+
+2. **Positional encoding limits.** Most models use positional encodings that degrade at extreme distances. Tokens far apart may not be properly related.
+
+3. **Training distribution mismatch.** Most training data uses contexts of 4K-128K tokens. Models see far fewer examples of 1M+ token contexts during training.
+
+4. **The "lost in the middle" effect.** Research consistently shows that models perform best on information near the beginning and end of a context, with degraded recall in the middle.
+
+## The evaluation gap
+
+Most public evaluations test context retrieval at 128K tokens or fewer. Needle-in-a-haystack benchmarks at 1M+ tokens are rare, and standardized benchmarks at 10M tokens are essentially nonexistent.
+
+This means:
+
+- A model claiming 10M context has been *verified* at 10M only on synthetic tasks.
+- Real-world performance at maximum context is largely unmeasured.
+- The gap between claimed and *effective* context is unknown for most models.
+
+## What actually matters
+
+For most workloads, the relevant metric is not maximum context but **effective context**: the amount of context the model can actually use with acceptable quality.
+
+Effective context depends on:
+
+- **Task complexity.** Simple retrieval tolerates longer contexts than multi-step reasoning.
+- **Information density.** Dense technical text is harder to attend to than sparse, structured data.
+- **Query position.** Information near the start or end of context is recalled better.
+- **Model architecture.** Some architectures (like sliding window attention) handle long contexts better than others.
+
+## Practical guidance
+
+If you are evaluating models for long-context workloads:
+
+1. **Test with your own data.** Synthetic benchmarks do not capture your use case.
+2. **Measure at your actual context length.** Do not assume 128K results generalize to 10M.
+3. **Check retrieval quality, not just completion.** A model that completes a task is not necessarily using the right information.
+4. **Consider chunking.** For many workloads, well-chunked 128K contexts outperform a single massive context.
+
+## The bottom line
+
+Context window size is a capability claim, not a quality guarantee. A 10M-token window is genuinely useful for specific workloads — large codebase analysis, long-document summarization, multi-session agent memory. But it is not a magic number that makes other evaluation metrics irrelevant.
+
+The models that will win on long context are not the ones with the biggest number. They are the ones with the best *effective* context — and the honest evaluations to prove it.

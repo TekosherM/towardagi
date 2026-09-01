@@ -63,7 +63,7 @@ export default function PrivacyPage() {
               privacy policy.
             </li>
             <li>
-              <Strong>Newsletter:</strong> If you subscribe, your email is processed by our
+              <strong>Newsletter:</strong> If you subscribe, your email is processed by our
               newsletter delivery provider solely to send you the newsletter you requested.
             </li>
             <li>

@@ -1,4 +1,4 @@
-﻿import type { WithContext, Organization, WebSite, WebPage, Article, NewsArticle, Person, BreadcrumbList, ItemList } from "schema-dts";
+import type { WithContext, Organization, WebSite, WebPage, Article, NewsArticle, Person, BreadcrumbList, ItemList } from "schema-dts";
 
 const BASE = "https://towardagi.com";
 
@@ -32,7 +32,7 @@ function WebsiteJsonLd() {
     name: "Toward AGI",
     description: "Dispatches from the road to AGI.",
     publisher: { "@id": `${BASE}/#organization` },
-    potentialAction: [{ "@type": "SearchAction", target: { "@type": "EntryPoint", urlTemplate: `${BASE}/search?q={search_term_string}` }, "query-input": "required name=search_term_string" }],
+    potentialAction: [{ "@type": "SearchAction", target: { "@type": "EntryPoint", urlTemplate: `${BASE}/search?q={search_term_string}` }, "query-input": "required name=search_term_string" }] as any,
   };
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(json) }} />;
 }

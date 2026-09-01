@@ -30,7 +30,7 @@ export default async function PlayerPage({ params }: { params: Promise<Params> }
 
   const alternatives = player.alternatives
     .map((a) => getPlayer(a))
-    .filter(Boolean);
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   return (
     <div className="pt-16">
