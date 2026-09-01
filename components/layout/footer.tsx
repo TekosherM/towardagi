@@ -15,13 +15,19 @@ const PROJECT = [
   { href: "/authors", label: "Authors" },
   { href: "/about", label: "About" },
   { href: "/contribute", label: "Contribute" },
+  { href: "/search", label: "Search" },
   { href: "/feed.xml", label: "RSS" },
+];
+
+const LEGAL = [
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
 ];
 
 export function Footer() {
   const stats = getStats();
   return (
-    <footer className="relative border-t border-line bg-abyss">
+    <footer className="relative border-t border-line bg-abyss" role="contentinfo">
       <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>

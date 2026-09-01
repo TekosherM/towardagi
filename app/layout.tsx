@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Space_Grotesk, Instrument_Serif } from "next/fon
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
 import { Spotlight } from "@/components/fx/spotlight";
+import { BackToTop } from "@/components/ui/back-to-top";
 import { JsonLd } from "@/components/seo/json-ld";
 import "./globals.css";
 
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <main className="relative z-10">{children}</main>
         <Footer />
+        <BackToTop />
       </body>
     </html>
   );
