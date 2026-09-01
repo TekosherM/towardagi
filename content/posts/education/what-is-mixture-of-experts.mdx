@@ -1,0 +1,64 @@
+---
+title: "What Is Mixture of Experts? The Architecture Behind the New Wave of Models"
+description: "Mixture of Experts (MoE) is the dominant architecture in modern open-weights models. Here's how it works, why it matters, and what tradeoffs it introduces."
+category: education
+date: 2026-08-26
+authors: [editorial]
+tags: [moe, architecture, education, transformers]
+---
+
+If you have been tracking model releases in 2026, you have noticed a pattern: almost every major open-weights model now uses Mixture of Experts (MoE). DeepSeek V4, Llama 4 Scout, Mistral Large 3 — all MoE.
+
+But what exactly is Mixture of Experts, and has it become the default architecture? Let's break it down.
+
+## The core idea
+
+A standard transformer is "dense": every parameter participates in processing every token. That means if a model has 100 billion parameters, all 100 billion are invoked for every single token generated.
+
+Mixture of Experts takes a different approach. Instead of one large feed-forward network, the model contains many smaller "experts" — typically 8, 16, or more. For each token, a routing network selects only a handful of those experts to activate.
+
+The result: a model can have a very large total parameter count while only using a fraction of those parameters per token.
+
+## How the router works
+
+The router is a small neural network that examines each hidden state and decides which experts are most relevant. In a typical MoE layer:
+
+1. The router computes a probability distribution over all experts.
+2. The top-k experts are selected (usually k=2 or k=4).
+3. Only those experts process the token.
+4. Their outputs are weighted-combined based on the router's probabilities.
+
+Training a router is non-trivial. Without constraints, the model tends to route everything to the same few experts — a problem called "expert collapse." Modern training uses auxiliary load-balancing losses to encourage even expert utilization.
+
+## Why labs love MoE
+
+The economics are compelling:
+
+- **Lower inference cost per token.** If only 2 of 16 experts are active, you get the capacity of a 100B+ model at roughly the inference cost of a 12-15B dense model.
+- **Specialization.** Different experts can implicitly specialize in different domains — code, math, multilingual, factual recall — even without explicit supervision.
+- **Scaling headroom.** Adding more experts is a straightforward way to increase model capacity without proportionally increasing compute per token.
+
+## The tradeoffs
+
+MoE is not free. There are real costs:
+
+- **Memory footprint.** All experts must live in memory, even if only a few are active per token. A 100B MoE model needs enough VRAM to hold all 100B parameters.
+- **Routing instability.** The router can produce brittle behavior — small input changes may activate different experts, leading to inconsistent outputs.
+- **Training complexity.** Load balancing, expert capacity limits, and routing noise all add hyperparameters and failure modes.
+- **Communication overhead.** In distributed inference, different experts may live on different GPUs, requiring all-to-all communication.
+
+## Where the field is heading
+
+The trend is toward more experts, not fewer. Recent models have experimented with:
+
+- **Fine-grained experts** — many small experts rather than few large ones.
+- **Shared experts** — a small set of always-active experts alongside the routed ones.
+- **Soft MoE** — differentiable, continuous routing instead of discrete top-k selection.
+
+The goal is to make the boundary between "dense" and "sparse" models increasingly blurry — getting the best of both worlds.
+
+## The bottom line
+
+Mixture of Experts is not a magic trick. It is an engineering tradeoff: more total parameters, fewer active parameters per token. When done well, it delivers frontier-class quality at a fraction of the inference cost. When done poorly, it gives you the worst of both worlds — high memory, inconsistent quality, and training instability.
+
+The models that get it right are the ones defining the current generation. Understanding MoE is essential to understanding where the field is headed.

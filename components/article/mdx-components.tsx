@@ -58,6 +58,41 @@ export function Callout({
   );
 }
 
+function CopyCodeButton({ text }: { text: string }) {
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback
+      const input = document.createElement("input");
+      input.value = text;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className="absolute right-3 top-3 border border-line bg-void/80 px-2 py-1 font-mono text-[0.6rem] tracking-[0.1em] uppercase text-fog transition-colors hover:border-signal/50 hover:text-signal"
+      aria-label="Copy code"
+    >
+      {copied ? "Copied!" : "Copy"}
+    </button>
+  );
+}
+
+import React from "react";
+
 export const mdxComponents = {
   h2: (props: { children?: ReactNode }) => <Heading depth={2} {...props} />,
   h3: (props: { children?: ReactNode }) => <Heading depth={3} {...props} />,
@@ -72,16 +107,25 @@ export const mdxComponents = {
   },
   pre: (props: { children?: ReactNode }) => {
     let lang = "";
+    let codeText = "";
     try {
       const child = Children.only(props.children);
       if (isValidElement(child)) {
         const cls = String((child.props as { className?: string }).className ?? "");
         lang = /language-([\w-]+)/.exec(cls)?.[1] ?? "";
+        // Extract text content for copy button
+        const codeEl = child.props as { children?: string };
+        codeText = codeEl.children ?? "";
       }
     } catch {
       lang = "";
     }
-    return <pre data-lang={lang}>{props.children}</pre>;
+    return (
+      <pre data-lang={lang} className="relative">
+        <CopyCodeButton text={codeText} />
+        {props.children}
+      </pre>
+    );
   },
   Callout,
 };

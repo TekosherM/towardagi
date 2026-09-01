@@ -92,11 +92,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrains.variable} ${instrument.variable}`}
     >
       <body className="noise">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-signal focus:px-4 focus:py-2 focus:text-void"
+        >
+          Skip to main content
+        </a>
         <JsonLd type="organization" />
         <JsonLd type="website" />
         <Spotlight />
         <Nav />
-        <main className="relative z-10">{children}</main>
+        <main id="main-content" className="relative z-10">{children}</main>
         <Footer />
         <BackToTop />
       </body>
