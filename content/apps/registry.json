@@ -1,0 +1,125 @@
+{
+  "updatedAt": "2026-08-28T00:00:00.000Z",
+  "categories": [
+    { "slug": "writing", "name": "Writing & Content", "description": "AI tools for writing, editing, and content creation" },
+    { "slug": "coding", "name": "Coding & Development", "description": "AI-powered coding assistants and development tools" },
+    { "slug": "image", "name": "Image Generation", "description": "AI image generation and editing tools" },
+    { "slug": "video", "name": "Video Generation", "description": "AI video creation and editing tools" },
+    { "slug": "audio", "name": "Audio & Voice", "description": "AI audio generation, transcription, and voice tools" },
+    { "slug": "research", "name": "Research & Analysis", "description": "AI tools for research, analysis, and knowledge work" },
+    { "slug": "productivity", "name": "Productivity & Automation", "description": "AI productivity and workflow automation tools" },
+    { "slug": "agents", "name": "Agents & Workflows", "description": "AI agent platforms and workflow builders" }
+  ],
+  "apps": [
+    {
+      "slug": "cursor",
+      "name": "Cursor",
+      "category": "coding",
+      "tasks": ["code-generation", "code-review", "refactoring", "debugging"],
+      "pricing": "freemium",
+      "url": "https://cursor.sh",
+      "description": "AI-first code editor with deep LLM integration",
+      "bestFor": "Developers who want AI deeply integrated into their editor",
+      "alternatives": ["github-copilot", "windsurf", "aider"]
+    },
+    {
+      "slug": "github-copilot",
+      "name": "GitHub Copilot",
+      "category": "coding",
+      "tasks": ["code-generation", "code-completion", "code-review"],
+      "pricing": "paid",
+      "url": "https://github.com/features/copilot",
+      "description": "AI pair programmer integrated into VS Code and other editors",
+      "bestFor": "Developers already in the GitHub ecosystem",
+      "alternatives": ["cursor", "windsurf", "aider"]
+    },
+    {
+      "slug": "chatgpt",
+      "name": "ChatGPT",
+      "category": "writing",
+      "tasks": ["writing", "editing", "brainstorming", "summarization"],
+      "pricing": "freemium",
+      "url": "https://chat.openai.com",
+      "description": "Conversational AI for writing, analysis, and general tasks",
+      "bestFor": "General-purpose writing and brainstorming",
+      "alternatives": ["claude", "perplexity", "jasper"]
+    },
+    {
+      "slug": "claude",
+      "name": "Claude (Anthropic)",
+      "category": "writing",
+      "tasks": ["writing", "editing", "analysis", "summarization"],
+      "pricing": "freemium",
+      "url": "https://claude.ai",
+      "description": "AI assistant focused on thoughtful, nuanced responses",
+      "bestFor": "Long-form writing and complex analysis",
+      "alternatives": ["chatgpt", "perplexity", "jasper"]
+    },
+    {
+      "slug": "perplexity",
+      "name": "Perplexity",
+      "category": "research",
+      "tasks": ["research", "search", "summarization", "fact-checking"],
+      "pricing": "freemium",
+      "url": "https://perplexity.ai",
+      "description": "AI-powered search engine with citations",
+      "bestFor": "Research with verified sources and citations",
+      "alternatives": ["chatgpt", "claude", "you-search"]
+    },
+    {
+      "slug": "midjourney",
+      "name": "Midjourney",
+      "category": "image",
+      "tasks": ["image-generation", "art-creation", "design"],
+      "pricing": "paid",
+      "url": "https://midjourney.com",
+      "description": "AI image generation known for artistic quality",
+      "bestFor": "Artistic and creative image generation",
+      "alternatives": ["dall-e", "stable-diffusion", "ideogram"]
+    },
+    {
+      "slug": "dall-e",
+      "name": "DALL-E 3 (OpenAI)",
+      "category": "image",
+      "tasks": ["image-generation", "illustration", "design"],
+      "pricing": "freemium",
+      "url": "https://openai.com/dall-e",
+      "description": "AI image generation integrated with ChatGPT",
+      "bestFor": "Quick image generation within ChatGPT",
+      "alternatives": ["midjourney", "stable-diffusion", "ideogram"]
+    },
+    {
+      "slug": "elevenlabs",
+      "name": "ElevenLabs",
+      "category": "audio",
+      "tasks": ["text-to-speech", "voice-cloning", "audio-generation"],
+      "pricing": "freemium",
+      "url": "https://elevenlabs.io",
+      "description": "AI voice generation and text-to-speech",
+      "bestFor": "High-quality voice synthesis and cloning",
+      "alternatives": ["murf", "play-ht", "openai-tts"]
+    },
+    {
+      "slug": "notion-ai",
+      "name": "Notion AI",
+      "category": "productivity",
+      "tasks": ["writing", "summarization", "organization", "automation"],
+      "pricing": "paid",
+      "url": "https://notion.so/product/ai",
+      "description": "AI integrated into Notion workspace",
+      "bestFor": "Notion users wanting AI in their workflow",
+      "alternatives": ["chatgpt", "claude", "mem"]
+    },
+    {
+      "slug": "zapier",
+      "name": "Zapier Central",
+      "category": "agents",
+      "tasks": ["automation", "workflow", "integration", "agent-building"],
+      "pricing": "freemium",
+      "url": "https://zapier.com",
+      "description": "AI-powered workflow automation platform",
+      "bestFor": "Automating workflows across multiple apps",
+      "alternatives": ["make", "n8n", "langchain"]
+    }
+  ]
+}

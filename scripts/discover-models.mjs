@@ -6,6 +6,9 @@
  * merges them into content/models/registry.json. Existing entries are
  * preserved; only new ids are appended. Safe to run on a cron schedule.
  *
+ * For new models, auto-publishes a brief "radar contact" post to
+ * content/posts/model-releases/auto-{slug}.mdx.
+ *
  * Usage: node scripts/discover-models.mjs
  */
 
@@ -15,6 +18,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const REGISTRY_PATH = path.join(ROOT, "content", "models", "registry.json");
+const POSTS_DIR = path.join(ROOT, "content", "posts", "model-releases");
 const MAX_MODELS = 300;
 
 const HF_URL =
@@ -23,6 +27,47 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/models";
 
 function slugifyId(id) {
   return id.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function formatNumber(n) {
+  if (n === undefined || Number.isNaN(n)) return "\u2014";
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return String(n);
+}
+
+function generateModelPost(model) {
+  const date = new Date().toISOString().split("T")[0];
+  const contextStr = model.context ? formatNumber(model.context) : "\u2014";
+
+  return `---
+title: "${model.org}/${model.name} \u2014 Radar Contact"
+description: "Automated radar contact for ${model.org}/${model.name}, a ${model.pipeline} model detected on ${model.source}."
+category: model-release
+date: ${date}
+auto: true
+model: ${model.id}
+tags: [${(model.tags || []).slice(0, 5).map((t) => `"${t}"`).join(", ")}]
+---
+
+**${model.org}/${model.name}** was detected by the model radar on ${date}.
+
+| Field | Value |
+|-------|-------|
+| **Source** | ${model.source} |
+| **Pipeline** | ${model.pipeline} |
+| **Modality** | ${model.modality || "text"} |
+| **Context** | ${contextStr} tokens |
+| **Downloads** | ${formatNumber(model.downloads)} |
+| **Likes** | ${formatNumber(model.likes)} |
+
+- [View on Hugging Face](https://huggingface.co/${model.id})
+${model.source === "openrouter" || model.source === "both" ? `- [View on OpenRouter](https://openrouter.ai/${model.id})` : ""}
+
+<Callout type="signal" title="Automated radar contact">
+This post was generated automatically by the model radar. Editorial analysis may follow.
+</Callout>
+`;
 }
 
 async function fetchJson(url, label) {
@@ -100,12 +145,14 @@ function loadRegistry() {
 function merge(registry, incoming) {
   const byId = new Map(registry.models.map((m) => [m.id, m]));
   let added = 0;
+  const newModels = [];
 
   for (const entry of incoming) {
     if (!entry.id || !entry.slug) continue;
     const existing = byId.get(entry.id);
     if (!existing) {
       byId.set(entry.id, entry);
+      newModels.push(entry);
       added += 1;
     } else if (
       existing.source !== entry.source &&
@@ -126,16 +173,41 @@ function merge(registry, incoming) {
       models,
     },
     added,
+    newModels,
   };
+}
+
+function autoPublishModels(models) {
+  if (models.length === 0) return 0;
+
+  fs.mkdirSync(POSTS_DIR, { recursive: true });
+  let published = 0;
+
+  for (const model of models) {
+    const filename = `auto-${model.slug}.mdx`;
+    const filepath = path.join(POSTS_DIR, filename);
+
+    // Skip if already published
+    if (fs.existsSync(filepath)) continue;
+
+    const content = generateModelPost(model);
+    fs.writeFileSync(filepath, content);
+    published += 1;
+    console.log(`[discover] auto-published: ${filename}`);
+  }
+
+  return published;
 }
 
 const registry = loadRegistry();
 const [hf, or] = await Promise.all([fetchHuggingFace(), fetchOpenRouter()]);
-const { registry: next, added } = merge(registry, [...hf, ...or]);
+const { registry: next, added, newModels } = merge(registry, [...hf, ...or]);
 
 fs.mkdirSync(path.dirname(REGISTRY_PATH), { recursive: true });
 fs.writeFileSync(REGISTRY_PATH, `${JSON.stringify(next, null, 2)}\n`);
 
+const published = autoPublishModels(newModels);
+
 console.log(
-  `[discover] hf=${hf.length} openrouter=${or.length} added=${added} total=${next.modelCount}`,
+  `[discover] hf=${hf.length} openrouter=${or.length} added=${added} published=${published} total=${next.modelCount}`,
 );
