@@ -67,6 +67,17 @@ export function Nav() {
 
         <div className="flex items-center gap-3">
           <Link
+            href="/search"
+            className="hidden items-center gap-2 border border-line px-3 py-2 font-mono text-[0.68rem] tracking-[0.18em] uppercase text-fog transition-colors hover:border-signal/50 hover:text-signal sm:inline-flex"
+            aria-label="Search"
+          >
+            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            Search
+          </Link>
+          <Link
             href="/contribute"
             className="hidden border border-signal/60 px-4 py-2 font-mono text-[0.68rem] tracking-[0.18em] uppercase text-signal transition-all hover:bg-signal hover:text-void sm:inline-block"
           >

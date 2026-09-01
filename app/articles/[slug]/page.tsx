@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -10,6 +10,8 @@ import { CategoryBadge } from "@/components/ui/badge";
 import { CoverArt } from "@/components/ui/cover-art";
 import { PostCard } from "@/components/ui/post-card";
 import { JsonLd } from "@/components/seo/json-ld";
+import { ShareButtons } from "@/components/ui/share-buttons";
+import { Newsletter } from "@/components/ui/newsletter";
 import { categoryMeta } from "@/lib/categories";
 import { extractToc, getAuthor, getPost, getPosts, getRelated } from "@/lib/content";
 import { formatDate } from "@/lib/utils";
@@ -120,6 +122,14 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
 
         <div className="prose-agl max-w-3xl">
           <MDXRemote source={post.body} components={mdxComponents} />
+
+          <div className="mt-12">
+            <ShareButtons url={articleUrl} title={post.title} description={post.description} />
+          </div>
+
+          <div className="mt-12">
+            <Newsletter />
+          </div>
 
           <footer className="mt-16 border-t border-line pt-10">
             {authors.length > 0 && (
