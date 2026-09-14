@@ -104,7 +104,7 @@ export default function ModelsPage() {
       <PageHeader
         kicker="// live acquisition system"
         title="Model Radar"
-        description="An automated sweep of Hugging Face and OpenRouter, every six hours — plus a capability catalog that maps every contact to the jobs it can actually do."
+        description="An automated sweep of Hugging Face and OpenRouter, every six hours — filtered to notable labs and high-signal releases, with a capability catalog mapping every contact to the jobs it can actually do."
         meta={
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[0.65rem] tracking-[0.18em] uppercase text-dim">
             <span className="inline-flex items-center gap-2">
@@ -372,8 +372,11 @@ export default function ModelsPage() {
             </p>
             <p className="mt-2">
               A scheduled job queries the Hugging Face model API (sorted by creation
-              date) and the OpenRouter model list, merges the results, and commits
-              new contacts to the registry. Each contact gets a detail page and a
+              date) and the OpenRouter model list, then keeps only notable contacts:
+              models from known lab orgs, or community releases that clear an
+              engagement bar and aren't derivative repacks (see{" "}
+              <span className="text-bone/80">content/models/notable-orgs.json</span>).
+              Each contact gets a detail page and a
               heuristic capability profile; editors can override any score in{" "}
               <span className="text-bone/80">content/models/capabilities.json</span>.
               The watchlist combines curated entries with radar hints extracted from

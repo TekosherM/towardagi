@@ -86,7 +86,15 @@ The radar sweeps Hugging Face and OpenRouter for new text-generation models:
 npm run discover        # models
 npm run discover:news   # news digest + radar hints
 npm run discover:all    # both
+npm run prune           # drop non-notable contacts + their auto-posts
 ```
+
+The radar only registers **notable** models — anything from an allowlisted lab
+org, or a community model that clears an engagement bar (likes/downloads)
+without being a derivative repack (LoRA, quant, merge). The policy lives in
+`content/models/notable-orgs.json` and is shared by the site
+(`lib/notable.ts`), the discovery script, and `scripts/prune-registry.mjs`.
+Editorial posts referencing a model protect it from pruning.
 
 A GitHub Actions workflow runs the model sweep every 6 hours and the news
 aggregation every Monday at 8 AM (both on `workflow_dispatch` too), committing

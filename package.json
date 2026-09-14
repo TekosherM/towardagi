@@ -9,7 +9,8 @@
     "start": "next start",
     "discover": "node scripts/discover-models.mjs",
     "discover:news": "node scripts/discover-news.mjs",
-    "discover:all": "npm run discover && npm run discover:news"
+    "discover:all": "npm run discover && npm run discover:news",
+    "prune": "node scripts/prune-registry.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",

@@ -2,8 +2,10 @@
 /**
  * Model radar discovery script.
  *
- * Sweeps Hugging Face and OpenRouter for new text-generation models and
- * merges them into content/models/registry.json. Existing entries are
+ * Sweeps Hugging Face and OpenRouter for new text-generation models, keeps
+ * only notable contacts (allowlisted lab orgs, or high-engagement community
+ * releases that aren't derivative repacks — see content/models/notable-orgs.json),
+ * and merges them into content/models/registry.json. Existing entries are
  * preserved; only new ids are appended. Safe to run on a cron schedule.
  *
  * For new models, auto-publishes a brief "radar contact" post to
@@ -19,7 +21,36 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const REGISTRY_PATH = path.join(ROOT, "content", "models", "registry.json");
 const POSTS_DIR = path.join(ROOT, "content", "posts", "model-releases");
+const NOTABLE_PATH = path.join(ROOT, "content", "models", "notable-orgs.json");
 const MAX_MODELS = 300;
+
+// Notability gate — the registry focuses on notable releases: allowlisted lab
+// orgs, or community models that clear an engagement bar and aren't derivative
+// repacks (LoRAs, quants, merges). Keep in sync with lib/notable.ts.
+const NOTABLE = JSON.parse(fs.readFileSync(NOTABLE_PATH, "utf8"));
+const NOTABLE_ORGS = new Set(NOTABLE.orgs.map((o) => o.toLowerCase()));
+const DERIVATIVE_RE = new RegExp(
+  `(?:^|[-_/.\\s])(${NOTABLE.derivativePatterns.join("|")})(?:$|[-_/.\\s\\d])`,
+  "i",
+);
+
+function isNotableOrg(org) {
+  const o = (org ?? "").toLowerCase().replace(/^[~@]+/, "");
+  if (NOTABLE_ORGS.has(o)) return true;
+  for (const known of NOTABLE_ORGS) {
+    if (o === known || o.startsWith(`${known}-`) || known.startsWith(`${o}-`)) return true;
+  }
+  return false;
+}
+
+function isNotable(entry) {
+  if (isNotableOrg(entry.org)) return true;
+  if (DERIVATIVE_RE.test(`${entry.id} ${entry.name}`)) return false;
+  return (
+    (entry.likes ?? 0) >= NOTABLE.minLikes ||
+    (entry.downloads ?? 0) >= NOTABLE.minDownloads
+  );
+}
 
 const HF_URL =
   "https://huggingface.co/api/models?sort=createdAt&direction=-1&limit=100&filter=text-generation";
@@ -201,7 +232,9 @@ function autoPublishModels(models) {
 
 const registry = loadRegistry();
 const [hf, or] = await Promise.all([fetchHuggingFace(), fetchOpenRouter()]);
-const { registry: next, added, newModels } = merge(registry, [...hf, ...or]);
+const incoming = [...hf, ...or];
+const notable = incoming.filter(isNotable);
+const { registry: next, added, newModels } = merge(registry, notable);
 
 fs.mkdirSync(path.dirname(REGISTRY_PATH), { recursive: true });
 fs.writeFileSync(REGISTRY_PATH, `${JSON.stringify(next, null, 2)}\n`);
@@ -209,5 +242,5 @@ fs.writeFileSync(REGISTRY_PATH, `${JSON.stringify(next, null, 2)}\n`);
 const published = autoPublishModels(newModels);
 
 console.log(
-  `[discover] hf=${hf.length} openrouter=${or.length} added=${added} published=${published} total=${next.modelCount}`,
+  `[discover] hf=${hf.length} openrouter=${or.length} notable=${notable.length}/${incoming.length} added=${added} published=${published} total=${next.modelCount}`,
 );
