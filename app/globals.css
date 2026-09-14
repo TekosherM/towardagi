@@ -297,6 +297,25 @@ body {
 }
 .prose-agl img { border-radius: 10px; border: 1px solid var(--color-line); }
 
+/* ---------- shiki syntax highlighting ---------- */
+.shiki-code {
+  background: #080a0f !important;
+  border-radius: 10px;
+  padding: 1.1em 1.3em;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+.shiki-code code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-mono);
+}
+.prose-agl .shiki-code {
+  position: relative;
+}
+
 /* ---------- reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {

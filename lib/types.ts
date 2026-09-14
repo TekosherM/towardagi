@@ -3,7 +3,8 @@ export type Category =
   | "trends"
   | "education"
   | "deep-dive"
-  | "model-release";
+  | "model-release"
+  | "applied";
 
 export interface Author {
   slug: string;
@@ -29,6 +30,7 @@ export interface PostMeta {
   featured: boolean;
   model?: string;
   draft: boolean;
+  auto?: boolean;
   readingTime: number;
 }
 
@@ -66,4 +68,24 @@ export interface Registry {
   updatedAt: string;
   modelCount: number;
   models: ModelEntry[];
+}
+
+export type UpcomingConfidence = "confirmed" | "reported" | "rumored" | "signal";
+
+export interface UpcomingEntry {
+  id: string;
+  name: string;
+  org: string;
+  expectedWindow: string;
+  eta?: string;
+  confidence: UpcomingConfidence;
+  source: "curated" | "radar";
+  note: string;
+  url?: string;
+  addedAt: string;
+}
+
+export interface UpcomingFeed {
+  updatedAt: string;
+  entries: UpcomingEntry[];
 }

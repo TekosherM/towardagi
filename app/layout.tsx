@@ -75,6 +75,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  verification: {
+    google: "YOUR_GOOGLE_SITE_VERIFICATION_CODE",
+  },
   category: "technology",
 };
 

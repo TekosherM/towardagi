@@ -1,15 +1,16 @@
-name: Model Discovery
+name: Model Discovery & News Aggregation
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 */6 * * *"  # Every 6 hours
+    - cron: "0 8 * * 1"    # Every Monday at 8 AM
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  discover:
+  discover-models:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +26,27 @@ jobs:
         run: |
           git config user.name "towardagi-bot"
           git config user.email "bot@towardagi.com"
-          git add content/models/registry.json
+          git add content/models/registry.json content/posts/model-releases/
           git diff --cached --quiet || git commit -m "chore(radar): refresh model registry"
+          git push
+
+  discover-news:
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 8 * * 1' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Run news aggregation
+        run: node scripts/discover-news.mjs
+
+      - name: Commit news digest
+        run: |
+          git config user.name "towardagi-bot"
+          git config user.email "bot@towardagi.com"
+          git add content/posts/news/ content/models/upcoming.json
+          git diff --cached --quiet || git commit -m "chore(news): weekly industry digest + radar hints"
           git push

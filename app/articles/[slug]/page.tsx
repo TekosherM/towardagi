@@ -7,6 +7,7 @@ import { Toc } from "@/components/article/toc";
 import { mdxComponents } from "@/components/article/mdx-components";
 import { Reveal, Stagger } from "@/components/fx/reveal";
 import { CategoryBadge } from "@/components/ui/badge";
+import { AutoBadge } from "@/components/ui/auto-badge";
 import { CoverArt } from "@/components/ui/cover-art";
 import { PostCard } from "@/components/ui/post-card";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -94,6 +95,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
               <Link href={`/category/${meta.route}`}>
                 <CategoryBadge category={post.category} />
               </Link>
+              {post.auto && <AutoBadge />}
               {post.tags.slice(0, 3).map((tag) => (
                 <span key={tag} className="font-mono text-[0.62rem] tracking-[0.16em] uppercase text-dim">#{tag}</span>
               ))}

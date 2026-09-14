@@ -1,0 +1,71 @@
+{
+  "updatedAt": "2026-09-14T00:20:18.788Z",
+  "entries": [
+    {
+      "id": "watch-openai-gpt5-codex-next",
+      "name": "GPT-5 Codex (next iteration)",
+      "org": "openai",
+      "expectedWindow": "week of Sep 15",
+      "confidence": "reported",
+      "source": "curated",
+      "note": "OpenAI has been shipping coding-tuned refreshes on a tight cadence; watch the changelog and OpenRouter for a new gpt-5-codex variant.",
+      "url": "https://openai.com",
+      "addedAt": "2026-09-14T00:00:00.000Z"
+    },
+    {
+      "id": "watch-google-gemini3-pro",
+      "name": "Gemini 3 Pro",
+      "org": "google",
+      "expectedWindow": "week of Sep 15",
+      "confidence": "reported",
+      "source": "curated",
+      "note": "Flash shipped Aug 21; Pro historically follows within weeks. Expect image + long-context emphasis.",
+      "url": "https://deepmind.google",
+      "addedAt": "2026-09-14T00:00:00.000Z"
+    },
+    {
+      "id": "watch-deepseek-flash",
+      "name": "DeepSeek Flash tier",
+      "org": "deepseek-ai",
+      "expectedWindow": "week of Sep 15",
+      "confidence": "rumored",
+      "source": "curated",
+      "note": "DeepSeek V4 landed Aug 22; a distilled fast/cheap tier would extend their price-pressure strategy. Watch HF org page.",
+      "url": "https://huggingface.co/deepseek-ai",
+      "addedAt": "2026-09-14T00:00:00.000Z"
+    },
+    {
+      "id": "watch-anthropic-haiku-next",
+      "name": "Claude Haiku refresh",
+      "org": "anthropic",
+      "expectedWindow": "week of Sep 15",
+      "confidence": "signal",
+      "source": "curated",
+      "note": "Haiku-tier refreshes tend to follow flagship releases; no official date. Radar watching for new claude-* ids on OpenRouter.",
+      "url": "https://www.anthropic.com/news",
+      "addedAt": "2026-09-14T00:00:00.000Z"
+    },
+    {
+      "id": "radar-empowering-india-s-next-generation-of-innovators",
+      "name": "Gemini-powered",
+      "org": "Google DeepMind",
+      "expectedWindow": "unscheduled signal",
+      "confidence": "signal",
+      "source": "radar",
+      "note": "Radar hint from Google DeepMind: \"Empowering India’s next generation of innovators with ATL Saathi\"",
+      "url": "https://deepmind.google/blog/empowering-indias-next-generation-of-innovators-with-atl-saathi/",
+      "addedAt": "2026-09-14T00:20:18.786Z"
+    },
+    {
+      "id": "radar-gpt-6-astra-the-next-generation-in-intelligence-",
+      "name": "GPT-6",
+      "org": "OpenAI Blog",
+      "expectedWindow": "unscheduled signal",
+      "confidence": "signal",
+      "source": "radar",
+      "note": "Radar hint from OpenAI Blog: \"GPT-6 Astra: The next generation in intelligence for work\"",
+      "url": "https://openai.com/index/gpt-6-astra-next-generation-work",
+      "addedAt": "2026-09-14T00:20:18.784Z"
+    }
+  ]
+}

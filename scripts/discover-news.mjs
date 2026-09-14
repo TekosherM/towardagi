@@ -14,6 +14,8 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const NEWS_DIR = path.join(ROOT, "content", "posts", "news");
+const UPCOMING_PATH = path.join(ROOT, "content", "models", "upcoming.json");
+const MAX_RADAR_HINTS = 12;
 
 // Formal AI industry sources (RSS feeds)
 const SOURCES = [
@@ -27,6 +29,10 @@ const SOURCES = [
   { name: "Reuters Technology", url: "https://www.reutersagency.com/feed/?best-sectors=technology&post_type=best", category: "news" },
   { name: "MIT Technology Review AI", url: "https://www.technologyreview.com/topic/artificial-intelligence/feed", category: "news" },
   { name: "VentureBeat AI", url: "https://venturebeat.com/category/ai/feed/", category: "news" },
+  // applied / enterprise / government deployment coverage
+  { name: "NVIDIA Blog", url: "https://blogs.nvidia.com/feed/", category: "applied" },
+  { name: "AWS ML Blog", url: "https://aws.amazon.com/blogs/machine-learning/feed/", category: "applied" },
+  { name: "Microsoft Blog", url: "https://blogs.microsoft.com/feed/", category: "applied" },
 ];
 
 // Keywords for categorization
@@ -35,24 +41,40 @@ const MA_KEYWORDS = ["acquisition", "acquired", "merger", "merging", "buys", "pu
 const PRODUCT_KEYWORDS = ["launch", "released", "announces", "unveils", "introduces", "debuts", "ships"];
 const RESEARCH_KEYWORDS = ["research", "paper", "study", "breakthrough", "discovers", "finds", "shows"];
 const POLICY_KEYWORDS = ["regulation", "regulatory", "policy", "law", "legislation", "compliance", "government", "ban", "safety"];
+const APPLIED_KEYWORDS = [
+  "deploy", "deployment", "rollout", "rolls out", "enterprise", "customer",
+  "hospital", "agency", "city of", "state of", "contract", "production",
+  "adoption", "case study", "partners with", "partnership", "pilots",
+  "supply chain", "manufacturing", "logistics", "clinical", "government",
+];
+
+// Radar hints — feed items that suggest an unreleased model
+const UPCOMING_PATTERNS = [
+  /(?:will|to|set to|expected to|plans? to|prepar\w+ to)\s+(?:release|launch|unveil|announce|ship|debut|roll out)/i,
+  /upcoming|next[- ]gen|teas(?:e|ed|ing)|pre-?announce|leak/i,
+];
+const MODEL_NAME_RE =
+  /\b(gpt-?[\w.]*|claude[\s-]?[\w.]*|gemini[\s-]?[\w.]*|llama[\s-]?[\w.]*|grok[\s-]?[\w.]*|deepseek[\s-]?[\w.]*|qwen[\s-]?[\w.]*|mistral[\s-]?[\w.]*|kimi[\s-]?[\w.]*|glm[\s-]?[\w.]*|o\d\w*)\b/i;
 
 function slugify(input) {
   return input.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
-function categorizeItem(title, description) {
+function categorizeItem(title, description, sourceCategory) {
   const text = `${title} ${description}`.toLowerCase();
   if (FUNDING_KEYWORDS.some((k) => text.includes(k))) return "funding";
   if (MA_KEYWORDS.some((k) => text.includes(k))) return "ma";
   if (PRODUCT_KEYWORDS.some((k) => text.includes(k))) return "product";
+  if (APPLIED_KEYWORDS.some((k) => text.includes(k)) || sourceCategory === "applied")
+    return "applied";
   if (RESEARCH_KEYWORDS.some((k) => text.includes(k))) return "research";
   if (POLICY_KEYWORDS.some((k) => text.includes(k))) return "policy";
   return "other";
 }
 
-async function fetchFeed(url, label) {
+async function fetchFeed(source) {
   try {
-    const res = await fetch(url, {
+    const res = await fetch(source.url, {
       headers: {
         accept: "application/rss+xml, application/xml, text/xml, */*",
         "user-agent": "TowardAGI-NewsBot/1.0",
@@ -60,13 +82,13 @@ async function fetchFeed(url, label) {
       signal: AbortSignal.timeout(30_000),
     });
     if (!res.ok) {
-      console.warn(`[news] ${label}: HTTP ${res.status}`);
+      console.warn(`[news] ${source.name}: HTTP ${res.status}`);
       return [];
     }
     const text = await res.text();
-    return parseRSS(text, label);
+    return parseRSS(text, source);
   } catch (err) {
-    console.warn(`[news] ${label}: ${err.message}`);
+    console.warn(`[news] ${source.name}: ${err.message}`);
     return [];
   }
 }
@@ -88,8 +110,8 @@ function parseRSS(xml, source) {
         link: link.trim(),
         description: description ? decodeHTMLEntities(stripTags(description)).slice(0, 200) : "",
         pubDate: pubDate ? new Date(pubDate) : new Date(),
-        source,
-        category: categorizeItem(title, description || ""),
+        source: source.name,
+        category: categorizeItem(title, description || "", source.category),
       });
     }
   }
@@ -122,6 +144,7 @@ function generateDigest(items) {
     funding: [],
     ma: [],
     product: [],
+    applied: [],
     research: [],
     policy: [],
     other: [],
@@ -141,6 +164,9 @@ function generateDigest(items) {
   }
   if (grouped.product.length > 0) {
     sections.push({ title: "Product Launches", items: grouped.product });
+  }
+  if (grouped.applied.length > 0) {
+    sections.push({ title: "Applied AI & Deployments", items: grouped.applied });
   }
   if (grouped.research.length > 0) {
     sections.push({ title: "Research Highlights", items: grouped.research });
@@ -177,12 +203,68 @@ function generateDigest(items) {
   return mdx;
 }
 
+// Extract "upcoming model" radar hints from feed items and merge them into
+// content/models/upcoming.json. Hints are lowest-confidence signals — they
+// never overwrite curated entries and are deduplicated by id.
+function extractRadarHints(items) {
+  const hints = [];
+  for (const item of items) {
+    const text = `${item.title} ${item.description}`;
+    if (!UPCOMING_PATTERNS.some((p) => p.test(text))) continue;
+    const name = MODEL_NAME_RE.exec(text)?.[0];
+    if (!name) continue;
+    hints.push({
+      id: `radar-${slugify(item.title).slice(0, 48)}`,
+      name: name.replace(/\s+/g, "-"),
+      org: item.source,
+      expectedWindow: "unscheduled signal",
+      confidence: "signal",
+      source: "radar",
+      note: `Radar hint from ${item.source}: "${item.title}"`,
+      url: item.link,
+      addedAt: new Date().toISOString(),
+    });
+  }
+  return hints;
+}
+
+function mergeRadarHints(hints) {
+  let feed;
+  try {
+    feed = JSON.parse(fs.readFileSync(UPCOMING_PATH, "utf8"));
+  } catch {
+    feed = { updatedAt: new Date().toISOString(), entries: [] };
+  }
+  const entries = Array.isArray(feed.entries) ? feed.entries : [];
+  const seen = new Set(entries.map((e) => e.id));
+
+  let added = 0;
+  for (const hint of hints) {
+    if (seen.has(hint.id)) continue;
+    seen.add(hint.id);
+    entries.push(hint);
+    added += 1;
+  }
+
+  // keep curated entries plus the newest radar hints
+  const curated = entries.filter((e) => e.source !== "radar");
+  const radar = entries
+    .filter((e) => e.source === "radar")
+    .sort((a, b) => +new Date(b.addedAt) - +new Date(a.addedAt))
+    .slice(0, MAX_RADAR_HINTS);
+
+  fs.mkdirSync(path.dirname(UPCOMING_PATH), { recursive: true });
+  fs.writeFileSync(
+    UPCOMING_PATH,
+    `${JSON.stringify({ updatedAt: new Date().toISOString(), entries: [...curated, ...radar] }, null, 2)}\n`,
+  );
+  return added;
+}
+
 async function main() {
   console.log(`[news] Fetching from ${SOURCES.length} sources...`);
 
-  const results = await Promise.all(
-    SOURCES.map((s) => fetchFeed(s.url, s.name)),
-  );
+  const results = await Promise.all(SOURCES.map((s) => fetchFeed(s)));
 
   // Flatten and deduplicate by title similarity
   const allItems = results.flat();
@@ -203,6 +285,11 @@ async function main() {
   const topItems = uniqueItems.slice(0, 30);
 
   console.log(`[news] Found ${uniqueItems.length} unique items, using ${topItems.length}`);
+
+  // Merge upcoming-model radar hints into the watchlist
+  const hints = extractRadarHints(uniqueItems);
+  const hintsAdded = mergeRadarHints(hints);
+  console.log(`[news] radar hints: ${hints.length} found, ${hintsAdded} new`);
 
   if (topItems.length === 0) {
     console.log("[news] No items found, skipping digest generation");

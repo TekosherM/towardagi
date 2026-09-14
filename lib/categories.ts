@@ -61,6 +61,16 @@ export const CATEGORIES: CategoryMeta[] = [
     description:
       "Long-form technical investigations. We take one idea apart, bolt by bolt, and put it back together in front of you.",
   },
+  {
+    slug: "applied",
+    route: "applied",
+    label: "Applied",
+    plural: "Applied AI",
+    glyph: "⬡",
+    color: "#7ce38b",
+    description:
+      "AI in production — deployments by corporations, institutions, and governments, plus novel applications solving real-world problems.",
+  },
 ];
 
 export function categoryMeta(slug: Category): CategoryMeta {

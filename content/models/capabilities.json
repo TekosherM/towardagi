@@ -1,0 +1,96 @@
+{
+  "updatedAt": "2026-09-14T00:00:00.000Z",
+  "about": "Curated editorial capability scores. Overlay entries win over the heuristic classifier in lib/capabilities.ts. match is an exact model id or a prefix ending in '*'. Scores: 0 unrated, 1 serviceable, 2 strong, 3 elite.",
+  "overlays": [
+    {
+      "match": "openai/gpt-5.2",
+      "scores": {
+        "chat": 3, "vibecoding": 3, "bots": 3, "claw": 3, "spark": 1,
+        "extraction": 3, "mechanics": 3, "reasoning": 3, "prose": 3,
+        "vision": 3, "image": 2, "video": 0, "frontend": 3, "gamedev": 2,
+        "transactions": 3, "latency": 1, "context": 3
+      },
+      "note": "Frontier flagship. The default answer for agentic and coding work; premium priced."
+    },
+    {
+      "match": "google/gemini-3-flash",
+      "scores": {
+        "chat": 3, "vibecoding": 2, "bots": 3, "claw": 2, "spark": 3,
+        "extraction": 3, "mechanics": 2, "reasoning": 2, "prose": 2,
+        "vision": 3, "image": 2, "video": 2, "frontend": 2, "gamedev": 1,
+        "transactions": 2, "latency": 3, "context": 3
+      },
+      "note": "Flash tier done right — fast, cheap, multimodal, enormous context. The volume play."
+    },
+    {
+      "match": "meta-llama/llama-4-scout",
+      "scores": {
+        "chat": 2, "vibecoding": 2, "bots": 3, "claw": 2, "spark": 2,
+        "extraction": 2, "mechanics": 2, "reasoning": 2, "prose": 2,
+        "vision": 2, "image": 0, "video": 0, "frontend": 2, "gamedev": 1,
+        "transactions": 2, "latency": 2, "context": 3
+      },
+      "note": "Open-weight workhorse with a very long window. Strong on-device and regional-privacy story."
+    },
+    {
+      "match": "deepseek-ai/deepseek-v4",
+      "scores": {
+        "chat": 2, "vibecoding": 3, "bots": 2, "claw": 2, "spark": 1,
+        "extraction": 2, "mechanics": 3, "reasoning": 3, "prose": 1,
+        "vision": 0, "image": 0, "video": 0, "frontend": 2, "gamedev": 2,
+        "transactions": 1, "latency": 1, "context": 2
+      },
+      "note": "Reasoning-per-dollar leader. Forces the whole market to re-price intelligence."
+    },
+    {
+      "match": "qwen/qwen3.5-72b-instruct",
+      "scores": {
+        "chat": 2, "vibecoding": 3, "bots": 2, "claw": 2, "spark": 1,
+        "extraction": 2, "mechanics": 3, "reasoning": 2, "prose": 2,
+        "vision": 0, "image": 0, "video": 0, "frontend": 2, "gamedev": 2,
+        "transactions": 1, "latency": 1, "context": 2
+      },
+      "note": "Best open-weight coding and math line outside the frontier labs."
+    },
+    {
+      "match": "mistralai/mistral-large-3",
+      "scores": {
+        "chat": 3, "vibecoding": 2, "bots": 3, "claw": 2, "spark": 1,
+        "extraction": 2, "mechanics": 2, "reasoning": 2, "prose": 3,
+        "vision": 0, "image": 0, "video": 0, "frontend": 2, "gamedev": 1,
+        "transactions": 2, "latency": 2, "context": 2
+      },
+      "note": "Polished European flagship — strong prose and enterprise support posture."
+    },
+    {
+      "match": "anthropic/claude-*",
+      "scores": {
+        "chat": 3, "vibecoding": 3, "bots": 2, "claw": 3, "spark": 1,
+        "extraction": 3, "mechanics": 2, "reasoning": 3, "prose": 3,
+        "vision": 2, "image": 0, "video": 0, "frontend": 3, "gamedev": 2,
+        "transactions": 3, "latency": 1, "context": 3
+      },
+      "note": "Claude family — consistently top-tier for long-horizon agentic and coding work."
+    },
+    {
+      "match": "x-ai/grok-*",
+      "scores": {
+        "chat": 3, "vibecoding": 2, "bots": 2, "claw": 2, "spark": 1,
+        "extraction": 2, "mechanics": 2, "reasoning": 2, "prose": 2,
+        "vision": 2, "image": 2, "video": 0, "frontend": 2, "gamedev": 1,
+        "transactions": 2, "latency": 2, "context": 2
+      },
+      "note": "Grok family — well-resourced contender with real-time X data access."
+    },
+    {
+      "match": "qwen/qwen2.5-coder*",
+      "scores": { "vibecoding": 3, "frontend": 2, "gamedev": 2, "chat": 1 },
+      "note": "Dedicated coder line — punches above its size on code tasks."
+    },
+    {
+      "match": "meta-llama/*",
+      "scores": { "chat": 2, "bots": 2, "extraction": 2 },
+      "note": "Llama family — open weights, self-hostable, device-friendly."
+    }
+  ]
+}

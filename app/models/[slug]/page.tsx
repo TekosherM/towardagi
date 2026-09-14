@@ -5,7 +5,8 @@ import { Reveal, Stagger } from "@/components/fx/reveal";
 import { Pill } from "@/components/ui/badge";
 import { PostCard } from "@/components/ui/post-card";
 import { Terminal } from "@/components/ui/terminal";
-import { getModel, getPostsForModel, getRegistry } from "@/lib/content";
+import { CAPABILITIES, SCORE_DOTS, profileFor } from "@/lib/capabilities";
+import { getCapabilityOverlay, getModel, getPostsForModel, getRegistry } from "@/lib/content";
 import { formatDate, formatNumber, timeAgo } from "@/lib/utils";
 
 interface Params {
@@ -36,6 +37,10 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
   if (!model) notFound();
 
   const posts = getPostsForModel(model.id);
+  const profile = profileFor(model, getCapabilityOverlay());
+  const rated = CAPABILITIES.map((c) => ({ cap: c, score: profile.scores[c.id] ?? 0 })).filter(
+    (r) => r.score > 0,
+  );
 
   const facts: Array<[string, string]> = [
     ["id", model.id],
@@ -96,6 +101,27 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
                   </li>
                 ))}
               </ul>
+              {rated.length > 0 && (
+                <div className="mt-6 border-t border-line/60 pt-4">
+                  <p className="mb-3 text-dim">
+                    <span className="text-signal">$</span> capability profile{" "}
+                    <span className="text-dim/70">
+                      ({profile.provenance === "curated" ? "editorial" : "heuristic"})
+                    </span>
+                  </p>
+                  <ul className="grid grid-cols-2 gap-x-6 gap-y-1.5 sm:grid-cols-3">
+                    {rated.map(({ cap, score }) => (
+                      <li key={cap.id} className="flex items-baseline gap-2" title={cap.blurb}>
+                        <span className="w-6 shrink-0 text-center text-signal">{SCORE_DOTS[score]}</span>
+                        <span className="truncate text-bone/75">{cap.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {profile.note && (
+                    <p className="mt-3 leading-relaxed text-fog/80">{profile.note}</p>
+                  )}
+                </div>
+              )}
               <p className="mt-5 text-dim">
                 <span className="text-signal">$</span> upstream record:{" "}
                 <a

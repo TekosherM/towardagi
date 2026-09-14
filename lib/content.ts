@@ -3,13 +3,16 @@ import fs from "node:fs";
 import path from "node:path";
 import { cache } from "react";
 import matter from "gray-matter";
-import type { Author, Category, Post, Registry, TocItem } from "./types";
+import type { CapabilityOverlay } from "./capabilities";
+import type { Author, Category, Post, Registry, TocItem, UpcomingFeed } from "./types";
 import { readingTime, slugify } from "./utils";
 
 const ROOT = process.cwd();
 const POSTS_DIR = path.join(ROOT, "content", "posts");
 const AUTHORS_DIR = path.join(ROOT, "content", "authors");
 const REGISTRY_PATH = path.join(ROOT, "content", "models", "registry.json");
+const CAPABILITIES_PATH = path.join(ROOT, "content", "models", "capabilities.json");
+const UPCOMING_PATH = path.join(ROOT, "content", "models", "upcoming.json");
 
 function walk(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
@@ -43,6 +46,7 @@ export const getPosts = cache((): Post[] => {
         tags: (data.tags as string[]) ?? [],
         featured: Boolean(data.featured),
         model: data.model as string | undefined,
+        auto: Boolean(data.auto),
         draft: Boolean(data.draft),
         readingTime: readingTime(content),
         body: content,
@@ -122,6 +126,31 @@ export const getRegistry = cache((): Registry => {
 
 export function getModel(slug: string) {
   return getRegistry().models.find((m) => m.slug === slug);
+}
+
+export const getCapabilityOverlay = cache((): CapabilityOverlay => {
+  try {
+    const raw = fs.readFileSync(CAPABILITIES_PATH, "utf8");
+    return JSON.parse(raw) as CapabilityOverlay;
+  } catch {
+    return {};
+  }
+});
+
+export const getUpcoming = cache((): UpcomingFeed => {
+  try {
+    const raw = fs.readFileSync(UPCOMING_PATH, "utf8");
+    return JSON.parse(raw) as UpcomingFeed;
+  } catch {
+    return { updatedAt: new Date(0).toISOString(), entries: [] };
+  }
+});
+
+export function getRecentModels(days = 30) {
+  const cutoff = Date.now() - days * 86_400_000;
+  return getRegistry().models.filter(
+    (m) => +new Date(m.releasedAt) >= cutoff || +new Date(m.discoveredAt) >= cutoff,
+  );
 }
 
 export function getPostsForModel(modelId: string): Post[] {
