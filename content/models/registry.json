@@ -1,7 +1,21 @@
 {
-  "updatedAt": "2026-09-19T02:58:23.252Z",
-  "modelCount": 114,
+  "updatedAt": "2026-09-19T10:15:07.587Z",
+  "modelCount": 115,
   "models": [
+    {
+      "id": "z-ai/glm-5.3-flashx",
+      "slug": "z-ai-glm-5-3-flashx",
+      "name": "Z.ai: GLM 5.3 FlashX",
+      "org": "z-ai",
+      "source": "openrouter",
+      "discoveredAt": "2026-09-19T10:15:07.517Z",
+      "releasedAt": "2026-09-18T15:07:00.000Z",
+      "pipeline": "text-generation",
+      "modality": "multimodal",
+      "context": 1048576,
+      "tags": [],
+      "url": "https://openrouter.ai/z-ai/glm-5.3-flashx"
+    },
     {
       "id": "deepseek/deepseek-v4-flash-0731:free",
       "slug": "deepseek-deepseek-v4-flash-0731-free",
