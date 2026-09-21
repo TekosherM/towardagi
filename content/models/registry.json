@@ -1,7 +1,49 @@
 {
-  "updatedAt": "2026-09-21T17:48:44.529Z",
-  "modelCount": 116,
+  "updatedAt": "2026-09-21T21:40:05.544Z",
+  "modelCount": 119,
   "models": [
+    {
+      "id": "xiaomi/mimo-v2.6-pro-ultraspeed",
+      "slug": "xiaomi-mimo-v2-6-pro-ultraspeed",
+      "name": "Xiaomi: MiMo-V2.6-Pro-UltraSpeed",
+      "org": "xiaomi",
+      "source": "openrouter",
+      "discoveredAt": "2026-09-21T21:40:05.427Z",
+      "releasedAt": "2026-09-21T20:07:47.000Z",
+      "pipeline": "text-generation",
+      "modality": "multimodal",
+      "context": 1048576,
+      "tags": [],
+      "url": "https://openrouter.ai/xiaomi/mimo-v2.6-pro-ultraspeed"
+    },
+    {
+      "id": "xiaomi/mimo-v2.6-flash",
+      "slug": "xiaomi-mimo-v2-6-flash",
+      "name": "Xiaomi: MiMo-V2.6-Flash",
+      "org": "xiaomi",
+      "source": "openrouter",
+      "discoveredAt": "2026-09-21T21:40:05.427Z",
+      "releasedAt": "2026-09-21T20:07:44.000Z",
+      "pipeline": "text-generation",
+      "modality": "multimodal",
+      "context": 1048576,
+      "tags": [],
+      "url": "https://openrouter.ai/xiaomi/mimo-v2.6-flash"
+    },
+    {
+      "id": "xiaomi/mimo-v2.6-pro",
+      "slug": "xiaomi-mimo-v2-6-pro",
+      "name": "Xiaomi: MiMo-V2.6-Pro",
+      "org": "xiaomi",
+      "source": "openrouter",
+      "discoveredAt": "2026-09-21T21:40:05.427Z",
+      "releasedAt": "2026-09-21T20:07:39.000Z",
+      "pipeline": "text-generation",
+      "modality": "multimodal",
+      "context": 1048576,
+      "tags": [],
+      "url": "https://openrouter.ai/xiaomi/mimo-v2.6-pro"
+    },
     {
       "id": "x-ai/grok-4.7",
       "slug": "x-ai-grok-4-7",
