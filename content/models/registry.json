@@ -1,7 +1,21 @@
 {
-  "updatedAt": "2026-09-21T11:53:54.959Z",
-  "modelCount": 115,
+  "updatedAt": "2026-09-21T17:48:44.529Z",
+  "modelCount": 116,
   "models": [
+    {
+      "id": "x-ai/grok-4.7",
+      "slug": "x-ai-grok-4-7",
+      "name": "SpaceXAI: Grok 4.7",
+      "org": "x-ai",
+      "source": "openrouter",
+      "discoveredAt": "2026-09-21T17:48:44.454Z",
+      "releasedAt": "2026-09-21T16:19:01.000Z",
+      "pipeline": "text-generation",
+      "modality": "multimodal",
+      "context": 500000,
+      "tags": [],
+      "url": "https://openrouter.ai/x-ai/grok-4.7"
+    },
     {
       "id": "z-ai/glm-5.3-flashx",
       "slug": "z-ai-glm-5-3-flashx",
