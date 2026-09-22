@@ -1,7 +1,21 @@
 {
-  "updatedAt": "2026-09-22T10:54:18.920Z",
-  "modelCount": 119,
+  "updatedAt": "2026-09-22T16:12:28.340Z",
+  "modelCount": 120,
   "models": [
+    {
+      "id": "deepseek/deepseek-v4.1-flash:batch",
+      "slug": "deepseek-deepseek-v4-1-flash-batch",
+      "name": "DeepSeek: DeepSeek V4.1 Flash (batch)",
+      "org": "deepseek",
+      "source": "openrouter",
+      "discoveredAt": "2026-09-22T16:12:28.200Z",
+      "releasedAt": "2026-09-10T06:21:25.000Z",
+      "pipeline": "text-generation",
+      "modality": "multimodal",
+      "context": 1048576,
+      "tags": [],
+      "url": "https://openrouter.ai/deepseek/deepseek-v4.1-flash:batch"
+    },
     {
       "id": "xiaomi/mimo-v2.6-pro-ultraspeed",
       "slug": "xiaomi-mimo-v2-6-pro-ultraspeed",
