@@ -1,7 +1,21 @@
 {
-  "updatedAt": "2026-09-23T10:42:37.919Z",
-  "modelCount": 132,
+  "updatedAt": "2026-09-23T16:01:25.861Z",
+  "modelCount": 133,
   "models": [
+    {
+      "id": "upstage/solar-mini4",
+      "slug": "upstage-solar-mini4",
+      "name": "Upstage: Solar Mini 4",
+      "org": "upstage",
+      "source": "openrouter",
+      "discoveredAt": "2026-09-23T16:01:25.859Z",
+      "releasedAt": "2026-09-23T10:45:58.000Z",
+      "pipeline": "text-generation",
+      "modality": "text",
+      "context": 524288,
+      "tags": [],
+      "url": "https://openrouter.ai/upstage/solar-mini4"
+    },
     {
       "id": "cohere/command-a-plus",
       "slug": "cohere-command-a-plus",
