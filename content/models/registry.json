@@ -1,7 +1,21 @@
 {
-  "updatedAt": "2026-09-23T21:01:32.995Z",
-  "modelCount": 134,
+  "updatedAt": "2026-09-24T02:59:01.507Z",
+  "modelCount": 135,
   "models": [
+    {
+      "id": "z-ai/glm-5.3-prime",
+      "slug": "z-ai-glm-5-3-prime",
+      "name": "Z.ai: GLM 5.3 Prime",
+      "org": "z-ai",
+      "source": "openrouter",
+      "discoveredAt": "2026-09-24T02:59:01.502Z",
+      "releasedAt": "2026-09-23T21:40:51.000Z",
+      "pipeline": "text-generation",
+      "modality": "text",
+      "context": 1000000,
+      "tags": [],
+      "url": "https://openrouter.ai/z-ai/glm-5.3-prime"
+    },
     {
       "id": "qwen/qwen3.8-max-prime",
       "slug": "qwen-qwen3-8-max-prime",
